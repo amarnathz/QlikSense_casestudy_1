@@ -1,0 +1,108 @@
+\\Section1
+
+Audi:
+CrossTable(MonthName ,  Sale )
+LOAD
+    
+    "DNP sales" as Type,
+    Jan,
+    Feb,
+    Mar,
+    Apr,
+    May,
+    Jun,
+    Jul,
+    Aug,
+    Sep,
+    Oct,
+    Nov,
+    Dec 
+FROM [lib://Downloads/All Brands Forecast_Budget_2015 (1) (1).xlsx]
+(ooxml, embedded labels, header is 1 lines, table is Audi);
+
+
+NoConcatenate
+final_1:
+Load
+* ,
+'Audit' as Brands 
+resident Audi;
+
+drop Table Audi;
+
+\\Section2 
+
+
+VW_1:
+
+crossTable(MonthName,Sale)
+LOAD
+    if( RowNo() < 4 ,
+         "Spare Parts sale to dealers"&' - Spare Parts sale to dealers',
+          "Spare Parts sale to dealers"&' - Accessory Sale to dealers'   )   as Type,
+    "42005" as Jan  ,
+     "42036" as Feb ,
+     "42064" as Mar ,
+      "42095" as Apr ,
+      "42125" as May ,
+      "42156" as Jun ,
+      "42186" as Jul ,  
+      "42217" as Aug , 
+      "42248" as Sep  ,
+       "42278"as Oct  ,
+      "42309" as Nov ,
+       "42339" as Dec
+
+FROM [lib://Downloads/All Brands Forecast_Budget_2015 (1) (1).xlsx]
+(ooxml, embedded labels, header is 1 lines, table is VW)
+
+;
+
+
+Concatenate(final_1)
+Load
+* ,
+'VW' as Brands 
+Resident VW_1
+where NOT Type LIKE 'Accessory Sale to dealers*' ;
+
+drop table VW_1;
+
+
+
+
+\\section 3
+
+
+skoda:
+
+crossTable(MonthName,Sale)
+LOAD
+    "Month" as Type,
+    Jan,
+    Feb,
+    Mar,
+    Apr,
+    May,
+    Jun,
+    Jul,
+    Aug,
+    Sep,
+    Oct,
+    Nov,
+    Dec
+    
+FROM [lib://Downloads/All Brands Forecast_Budget_2015 (1) (1).xlsx]
+(ooxml, embedded labels, header is 1 lines, table is Skoda);
+
+
+
+Concatenate(final_1)
+Load
+* ,
+'skoda' as Brands 
+resident skoda;
+
+drop Table skoda;
+
+
